@@ -1,7 +1,6 @@
 import dotenv from 'dotenv'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2'
-
 dotenv.config()
 
 passport.use(new GoogleStrategy({
@@ -10,7 +9,7 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://127.0.0.1:5151/google/callback",
     passReqToCallback: true
   },
-  function(request, accessToken, refreshToken, profile, done) {
+  (request, accessToken, refreshToken, profile, done) => {
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
     //   return done(err, user)
     // })
@@ -19,10 +18,10 @@ passport.use(new GoogleStrategy({
   }
 ))
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
   done(null, user)
 })
 
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user)
 })
