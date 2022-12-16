@@ -2,9 +2,10 @@
 
 ## Google Auth
 
-* __.env__ example:
+__.env__ example:
+
 ```
-GOOGLE_CLIENT_ID=XXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=XXXXXX-XXXXXXXXXXXXX_XXXXXXXXXXXXXX
+GOOGLE_CLIENT_ID=xxxx-xxxxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=xxxx-xxxx_xxxx
 SESSION_KEY=secret
 ```
