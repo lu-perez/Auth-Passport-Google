@@ -15,7 +15,7 @@ const PORT = 5151
 app.use(session({ 
   secret: process.env.SESSION_KEY,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false
 }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
