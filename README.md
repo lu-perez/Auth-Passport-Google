@@ -1,9 +1,8 @@
 # Auth Passport Google Strategy
 
 * Create project & credentials at [Console Google Cloud](https://console.cloud.google.com/)
-*https://console.cloud.google.com/*
 
-* Set callback URI
+* Set callback URI:
 ```
 http://127.0.0.1:5151/auth/google/callback
 ``` 
