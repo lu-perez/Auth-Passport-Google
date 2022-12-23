@@ -1,12 +1,11 @@
 import dotenv from 'dotenv'
 import express from 'express'
-import morgan from 'morgan'
-import helmet from 'helmet'
 import cors from 'cors'
-import passport from 'passport'
 import session from 'express-session'
+import passport from 'passport'
+import { passPortConfig } from './config/passport.js'
 import { isLoggedIn } from './middlewares/isLoggedIn.js'
-import * as googleAuth from './auth/auth.js'
+passPortConfig(passport)
 dotenv.config()
 
 const app = express()
@@ -19,8 +18,6 @@ app.use(session({
 }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(morgan('dev'))
-app.use(helmet())
 app.use(cors())
 app.use(passport.initialize())
 app.use(passport.session())
