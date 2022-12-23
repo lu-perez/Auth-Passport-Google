@@ -1,29 +1,20 @@
 import dotenv from 'dotenv'
 import express from 'express'
-import morgan from 'morgan'
-import helmet from 'helmet'
 import cors from 'cors'
 import passport from 'passport'
-//import session from 'express-session'
-import { isLoggedIn } from './middlewares/isLoggedIn.js'
-import * as googleAuth from './auth/auth.js'
+import { createJWT } from './lib/utilsJWT.js'
+import { authJWT } from './middlewares/jwtHelper.js'
+import { passportConfig } from './config/passport.js'
+passportConfig(passport)
 dotenv.config()
 
 const app = express()
 const PORT = 5151
 
-// app.use(session({ 
-//   secret: process.env.SESSION_KEY,
-//   resave: false,
-//   saveUninitialized: false
-// }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(morgan('dev'))
-app.use(helmet())
 app.use(cors())
 app.use(passport.initialize())
-//app.use(passport.session())
 
 app.get('/', (req, res) => {
   if (req.user) {
@@ -38,34 +29,17 @@ app.get('/auth/google',
 )
 
 app.get('/auth/google/callback',
-  // passport.authenticate('google', {
-  //   successRedirect: '/protected',
-  //   failureRedirect: '/auth/failure'
-  // })
   passport.authenticate('google', { session: false }),
   (req, res) => {
-    //res.send(`Hello ${req.user.displayName}\n<a href="/logout">Log out</a>`)
-    res.send({ token: req.user.displayName })
+    const { token, expiresIn } = createJWT(req.user)
+    res.send({ success: true, user: req.user.displayName, token, expiresIn })
   }
 )
 
-// app.get('/auth/failure', () => {
-//   res.send('something went wrong')
-// })
-
-// app.get('/protected', isLoggedIn, (req, res) => {
-//   res.send(`Hello ${req.user.displayName}\n<a href="/logout">Log out</a>`)
-// })
-
-// app.get('/logout', (req, res, next) => {
-//   req.logout(err => {
-//     if (err) {
-//       return next(err)
-//     }
-//   });
-//   req.session.destroy();
-//   res.send('Goodbye!');
-// })
+app.get('/protected', authJWT.verifyToken, (req, res) => {
+  console.log(req.decodedToken)
+  res.status(200).json({ success: true, msg: 'You are authorized!' })
+})
 
 app.listen(PORT, () => {
   console.log(`Server on port: ${PORT}`)
